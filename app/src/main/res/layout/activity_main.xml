@@ -19,49 +19,105 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_margin="100dp" />
+        android:layout_marginTop="40dp"/>
 
-    <!-- 微信登录按钮 -->
+<!--    &lt;!&ndash; 微信登录按钮 &ndash;&gt;-->
+<!--    <Button-->
+<!--        android:id="@+id/wechatLogin"-->
+<!--        android:layout_width="220dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="微信登录"-->
+<!--        android:textSize="18sp"-->
+<!--        android:backgroundTint="#06C160"-->
+<!--        android:textColor="#FFFFFF"-->
+<!--        android:layout_marginTop="80dp"-->
+<!--        android:drawablePadding="8dp"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/appTitle"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent" />-->
+
+<!--    &lt;!&ndash; QQ登录按钮 &ndash;&gt;-->
+<!--    <Button-->
+<!--        android:id="@+id/qqLogin"-->
+<!--        android:layout_width="220dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="QQ登录"-->
+<!--        android:textSize="18sp"-->
+<!--        android:backgroundTint="#12B7F5"-->
+<!--        android:textColor="#FFFFFF"-->
+<!--        android:layout_marginTop="20dp"-->
+<!--        android:drawablePadding="8dp"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/wechatLogin"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent" />-->
+
+<!--    &lt;!&ndash; 底部提示文字 &ndash;&gt;-->
+<!--    <TextView-->
+<!--        android:id="@+id/tipText"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="登录即表示同意《用户协议》和《隐私政策》"-->
+<!--        android:textColor="#888888"-->
+<!--        android:textSize="12sp"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintBottom_margin="40dp" />-->
+    <!-- added by hay begin -->
+    <!-- 拍照按钮 -->
     <Button
-        android:id="@+id/wechatLogin"
-        android:layout_width="220dp"
+        android:id="@+id/btnTakePhoto"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="微信登录"
-        android:textSize="18sp"
-        android:backgroundTint="#06C160"
-        android:textColor="#FFFFFF"
-        android:layout_marginTop="80dp"
-        android:drawablePadding="8dp"
+        android:text="拍照"
+        android:textSize="16sp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="40dp"
         app:layout_constraintTop_toBottomOf="@id/appTitle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- QQ登录按钮 -->
+    <!-- 新增：选取照片按钮 -->
     <Button
-        android:id="@+id/qqLogin"
-        android:layout_width="220dp"
+        android:id="@+id/btnSelectImage"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="QQ登录"
-        android:textSize="18sp"
-        android:backgroundTint="#12B7F5"
-        android:textColor="#FFFFFF"
-        android:layout_marginTop="20dp"
-        android:drawablePadding="8dp"
-        app:layout_constraintTop_toBottomOf="@id/wechatLogin"
+        android:text="选取照片"
+        android:textSize="16sp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/btnTakePhoto"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- 图片显示 -->
+    <ImageView
+        android:id="@+id/ivPhoto"
+        android:layout_width="0dp"
+        android:layout_height="300dp"
+        android:scaleType="centerCrop"
+        android:background="#EEEEEE"
+        app:layout_constraintTop_toBottomOf="@id/btnSelectImage"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="20dp"
+        tools:src="@mipmap/ic_launcher" />
+
 
     <!-- 底部提示文字 -->
     <TextView
         android:id="@+id/tipText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="登录即表示同意《用户协议》和《隐私政策》"
+        android:text="点击拍照按钮开始拍照"
         android:textColor="#888888"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_margin="40dp" />
+        android:layout_marginBottom="40dp"/>
+    <!-- added by hay end -->
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

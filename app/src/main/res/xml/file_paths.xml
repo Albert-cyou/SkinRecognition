@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 应用缓存目录 -->
+    <external-cache-path name="external_cache" path="." />
+    <!-- 允许访问 Pictures/SkinRecognition/ -->
+    <external-path name="my_images" path="Pictures/SkinRecognition/" />
+</paths>
+
+    <!--added by hay-->
