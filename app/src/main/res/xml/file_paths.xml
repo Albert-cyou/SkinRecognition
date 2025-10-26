@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <!-- 缓存目录：/data/data/<package>/cache -->
+    <cache-path name="cache" path="." />
+
+    <!-- 如需其他路径，继续加 -->
+    <!--
+    <files-path name="files" path="." />
+    <external-files-path name="external_files" path="." />
+    -->
+</paths>

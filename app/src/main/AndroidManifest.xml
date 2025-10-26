@@ -11,8 +11,26 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SkinRecognition">
-        <!-- 启动页 -->
-        <activity android:name=".SplashActivity"
+
+        <!-- ===== FileProvider：分享必备 ===== -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        <!-- 分享结果页 -->
+        <activity
+            android:name=".ShareResultActivity"
+            android:exported="true" />
+
+        <!-- 启动页（默认入口） -->
+        <activity
+            android:name=".SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
