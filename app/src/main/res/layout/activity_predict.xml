@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bg_gradient"
     tools:context=".PredictActivity">
 
     <!-- 应用标题 -->
@@ -13,124 +15,93 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="SkinCare AI"
-        android:textColor="#333333"
+        android:textColor="#222222"
         android:textSize="32sp"
         android:textStyle="bold"
+        android:fontFamily="sans-serif-medium"
+        android:layout_marginTop="50dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="40dp"/>
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- 识别结果显示 -->
+    <!-- 拍照按钮 -->
+    <Button
+        android:id="@+id/btnTakePhoto"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:text="📷 拍照识别"
+        android:textSize="18sp"
+        android:textColor="#FFFFFF"
+        android:background="@drawable/btn_main_selector"
+        android:layout_marginHorizontal="40dp"
+        android:layout_marginTop="40dp"
+        android:elevation="4dp"
+        app:layout_constraintTop_toBottomOf="@id/appTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- 选取照片按钮 -->
+    <Button
+        android:id="@+id/btnSelectImage"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:text="🖼️ 从相册选择"
+        android:textSize="18sp"
+        android:textColor="#FFFFFF"
+        android:background="@drawable/btn_secondary_selector"
+        android:layout_marginHorizontal="40dp"
+        android:layout_marginTop="16dp"
+        android:elevation="4dp"
+        app:layout_constraintTop_toBottomOf="@id/btnTakePhoto"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- 图片显示区 -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/photoCard"
+        android:layout_width="0dp"
+        android:layout_height="300dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginHorizontal="40dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="6dp"
+        app:layout_constraintTop_toBottomOf="@id/btnSelectImage"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:id="@+id/ivPhoto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:contentDescription="检测图片"
+            android:background="#EEEEEE"
+            tools:src="@mipmap/ic_launcher" />
+    </androidx.cardview.widget.CardView>
+
+    <!-- 识别结果 -->
     <TextView
         android:id="@+id/tvResult"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="识别结果将显示在这里"
-        android:textSize="16sp"
         android:textColor="#333333"
-        android:layout_marginTop="20dp"
-        app:layout_constraintTop_toBottomOf="@id/ivPhoto"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-<!--    &lt;!&ndash; 微信登录按钮 &ndash;&gt;-->
-<!--    <Button-->
-<!--        android:id="@+id/wechatLogin"-->
-<!--        android:layout_width="220dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="微信登录"-->
-<!--        android:textSize="18sp"-->
-<!--        android:backgroundTint="#06C160"-->
-<!--        android:textColor="#FFFFFF"-->
-<!--        android:layout_marginTop="80dp"-->
-<!--        android:drawablePadding="8dp"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/appTitle"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent" />-->
-
-<!--    &lt;!&ndash; QQ登录按钮 &ndash;&gt;-->
-<!--    <Button-->
-<!--        android:id="@+id/qqLogin"-->
-<!--        android:layout_width="220dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="QQ登录"-->
-<!--        android:textSize="18sp"-->
-<!--        android:backgroundTint="#12B7F5"-->
-<!--        android:textColor="#FFFFFF"-->
-<!--        android:layout_marginTop="20dp"-->
-<!--        android:drawablePadding="8dp"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/wechatLogin"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent" />-->
-
-<!--    &lt;!&ndash; 底部提示文字 &ndash;&gt;-->
-<!--    <TextView-->
-<!--        android:id="@+id/tipText"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="登录即表示同意《用户协议》和《隐私政策》"-->
-<!--        android:textColor="#888888"-->
-<!--        android:textSize="12sp"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintBottom_margin="40dp" />-->
-    <!-- added by hay begin -->
-    <!-- 拍照按钮 -->
-    <Button
-        android:id="@+id/btnTakePhoto"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="拍照"
         android:textSize="16sp"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="40dp"
-        app:layout_constraintTop_toBottomOf="@id/appTitle"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <!-- 新增：选取照片按钮 -->
-    <Button
-        android:id="@+id/btnSelectImage"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="选取照片"
-        android:textSize="16sp"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/btnTakePhoto"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <!-- 图片显示 -->
-    <ImageView
-        android:id="@+id/ivPhoto"
-        android:layout_width="0dp"
-        android:layout_height="300dp"
-        android:scaleType="centerCrop"
-        android:background="#EEEEEE"
-        app:layout_constraintTop_toBottomOf="@id/btnSelectImage"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="20dp"
-        android:layout_marginHorizontal="20dp"
-        tools:src="@mipmap/ic_launcher" />
+        app:layout_constraintTop_toBottomOf="@id/photoCard"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-
-    <!-- 底部提示文字 -->
+    <!-- 底部提示 -->
     <TextView
         android:id="@+id/tipText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="点击拍照按钮开始拍照"
-        android:textColor="#888888"
+        android:text="温馨提示：请保持光线充足，避免遮挡面部。"
+        android:textColor="#F2F2F2"
         android:textSize="12sp"
+        android:layout_marginBottom="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginBottom="40dp"/>
-    <!-- added by hay end -->
-
-
+        app:layout_constraintEnd_toEndOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
