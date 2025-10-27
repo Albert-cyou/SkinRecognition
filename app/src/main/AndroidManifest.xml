@@ -46,7 +46,7 @@
         <!-- added by hay end -->
 
         <activity
-            android:name=".MainActivity"
+            android:name=".PredictActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
