@@ -54,7 +54,7 @@ public class PredictActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_predict);
 
         // 初始化控件
         ivPhoto = findViewById(R.id.ivPhoto);
