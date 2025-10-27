@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -50,6 +51,8 @@ public class PredictActivity extends AppCompatActivity {
     private float[] scalerMean;
     private float[] scalerStd;
     private final String[] skinTypes = {"油性", "干性", "中性"};
+    private Button btnShare;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +64,7 @@ public class PredictActivity extends AppCompatActivity {
         btnTakePhoto = findViewById(R.id.btnTakePhoto);
         btnSelectImage = findViewById(R.id.btnSelectImage);
         tvResult = findViewById(R.id.tvResult);
+        btnShare = findViewById(R.id.btnShare);
 
         // 加载模型参数
         loadModelParams();
@@ -80,6 +84,14 @@ public class PredictActivity extends AppCompatActivity {
         // 选择图片按钮事件 - 使用新方法避免权限问题
         btnSelectImage.setOnClickListener(v -> {
             selectImageFromGallery();
+        });
+
+        // 点击分享按钮事件，跳转到分享页面
+        btnShare.setOnClickListener(v -> {
+            Intent intent = new Intent(PredictActivity.this, ShareResultActivity.class);
+            // 传递预测结果（可选）
+            intent.putExtra("result_text", tvResult.getText().toString());
+            startActivity(intent);
         });
     }
 
@@ -305,6 +317,8 @@ public class PredictActivity extends AppCompatActivity {
                                 features[0], features[2], features[4]
                         );
                         tvResult.append(featureText);
+//                        显示分享按钮
+                        btnShare.setVisibility(View.VISIBLE);
                     });
                 } catch (Exception e) {
                     e.printStackTrace();
