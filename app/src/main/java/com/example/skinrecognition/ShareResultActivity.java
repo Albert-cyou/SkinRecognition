@@ -2,6 +2,7 @@ package com.example.skinrecognition;
 
 import android.Manifest;
 import android.content.*;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.*;
 import android.net.Uri;
@@ -14,16 +15,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
-import android.content.pm.PackageManager;
 import java.io.*;
 
 public class ShareResultActivity extends AppCompatActivity {
 
     private static final int REQ_READ_STORAGE = 100;
     private ImageView ivResult;
-    private Bitmap  currentBitmap;      // 对外接口图片
+    private TextView tvResultText;
+    private Bitmap currentBitmap;
 
-    /* ===== 对外接口：任意组件可调用 ===== */
+    /* 对外接口：直接塞 Bitmap */
     public void setImageBitmap(Bitmap bmp) {
         currentBitmap = bmp;
         ivResult.setImageBitmap(bmp);
@@ -35,24 +36,50 @@ public class ShareResultActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.share);
 
+        tvResultText = findViewById(R.id.tv_result_text);
         ivResult = findViewById(R.id.iv_result);
-        Button btnSave  = findViewById(R.id.btn_save);
+        Button btnSave = findViewById(R.id.btn_save);
         Button btnShare = findViewById(R.id.btn_share);
 
-        /* 外部若通过 Intent 传图，优先使用；否则读相册第一张 */
-        Intent it = getIntent();
-        if (it.hasExtra("bitmap")) {
-            currentBitmap = (Bitmap) it.getParcelableExtra("bitmap");
-            ivResult.setImageBitmap(currentBitmap);
+        /* 1. 显示识别文字 */
+        String resultText = getIntent().getStringExtra("result_text");
+        if (resultText != null) tvResultText.setText(resultText);
+
+        /* 2. 加载图片：优先外部路径/Uri > 相册第一张 */
+        String path = getIntent().getStringExtra("result_image_path");
+        String uriStr = getIntent().getStringExtra("result_image_uri");
+
+        if (path != null) {
+            loadFromPath(path);
+        } else if (uriStr != null) {
+            loadFromUri(Uri.parse(uriStr));
         } else {
             loadFirstPhotoFromGallery();
         }
 
-        btnSave.setOnClickListener(v  -> saveImageToGallery());
+        btnSave.setOnClickListener(v -> saveImageToGallery());
         btnShare.setOnClickListener(v -> shareImage());
     }
 
-    /* ---------- 相册第一张图（默认） ---------- */
+    /* ---------- 外部路径优先 ---------- */
+    private void loadFromPath(String path) {
+        currentBitmap = BitmapFactory.decodeFile(path);
+        if (currentBitmap != null) ivResult.setImageBitmap(currentBitmap);
+        else showEmpty();
+    }
+
+    private void loadFromUri(Uri uri) {
+        try (InputStream is = getContentResolver().openInputStream(uri)) {
+            currentBitmap = BitmapFactory.decodeStream(is);
+            if (currentBitmap != null) ivResult.setImageBitmap(currentBitmap);
+            else showEmpty();
+        } catch (IOException e) {
+            e.printStackTrace();
+            showEmpty();
+        }
+    }
+
+    /* ---------- 相册第一张（默认） ---------- */
     private void loadFirstPhotoFromGallery() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -65,17 +92,16 @@ public class ShareResultActivity extends AppCompatActivity {
 
     private void queryFirstPhoto() {
         Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-        String[] proj = {MediaStore.Images.Media.DATA};
+        String[] proj = {MediaStore.Images.Media._ID};
         Cursor cursor = getContentResolver().query(uri, proj, null, null,
                 MediaStore.Images.Media.DATE_ADDED + " DESC LIMIT 1");
         if (cursor != null && cursor.moveToFirst()) {
-            int idx  = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            String path = cursor.getString(idx);
+            long id = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID));
+            Uri contentUri = ContentUris.withAppendedId(uri, id);
             cursor.close();
-            currentBitmap = BitmapFactory.decodeFile(path);
-            if (currentBitmap != null) ivResult.setImageBitmap(currentBitmap);
-            else showEmpty();
+            loadFromUri(contentUri);
         } else {
+            if (cursor != null) cursor.close();
             showEmpty();
         }
     }

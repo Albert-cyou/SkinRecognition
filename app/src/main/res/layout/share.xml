@@ -2,13 +2,25 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
-    tools:ignore="ExtraText">
+    android:background="#FFFFFF">
 
-    <!-- 展示图片 -->
+    <!-- 识别结果文字 -->
+    <TextView
+        android:id="@+id/tv_result_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="识别结果"
+        android:textSize="18sp"
+        android:textColor="#333333"
+        android:gravity="center"
+        android:padding="12dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/iv_result" />
+
     <!-- 展示图片 -->
     <ImageView
         android:id="@+id/iv_result"
@@ -16,12 +28,11 @@
         android:layout_height="0dp"
         android:scaleType="centerCrop"
         android:background="@android:color/transparent"
-        app:layout_constraintBottom_toTopOf="@+id/btn_container"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintVertical_bias="0.35"
-    app:layout_constraintDimensionRatio="1:1" />
+        app:layout_constraintTop_toBottomOf="@id/tv_result_text"
+        app:layout_constraintBottom_toTopOf="@id/btn_container"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintDimensionRatio="1:1" />
 
     <!-- 按钮容器 -->
     <LinearLayout
@@ -31,8 +42,8 @@
         android:orientation="horizontal"
         android:layout_marginBottom="48dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <Button
             android:id="@+id/btn_save"
@@ -47,5 +58,4 @@
             android:layout_width="120dp"
             android:layout_height="wrap_content" />
     </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>
