@@ -45,6 +45,17 @@
         </provider>
         <!-- added by hay end -->
 
+        <!-- ===== FileProvider：分享必备 ===== -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
         <!-- 启动页 -->
         <activity android:name=".SplashActivity"
             android:exported="true">
@@ -54,6 +65,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <!-- 登录页 -->
         <activity android:name=".LoginActivity" />
         <!-- 预测页 -->
@@ -65,6 +77,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- 分享结果页 -->
+        <activity
+            android:name=".ShareResultActivity"
+            android:exported="true" />
+
     </application>
 
 </manifest>

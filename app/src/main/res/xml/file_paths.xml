@@ -4,6 +4,15 @@
     <external-cache-path name="external_cache" path="." />
     <!-- 允许访问 Pictures/SkinRecognition/ -->
     <external-path name="my_images" path="Pictures/SkinRecognition/" />
+    <!-- 缓存目录：/data/data/<package>/cache -->
+    <cache-path name="cache" path="." />
+
+    <!-- 如需其他路径，继续加 -->
+    <!--
+    <files-path name="files" path="." />
+    <external-files-path name="external_files" path="." />
+    -->
+
 </paths>
 
     <!--added by hay-->
