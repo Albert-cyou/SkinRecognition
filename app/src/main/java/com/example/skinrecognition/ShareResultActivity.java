@@ -61,6 +61,9 @@ public class ShareResultActivity extends AppCompatActivity {
 
         btnSave.setOnClickListener(v -> saveImageToGallery());
         btnShare.setOnClickListener(v -> shareImage());
+
+        // 返回按钮点击事件
+        findViewById(R.id.btn_back).setOnClickListener(v -> finish());
     }
 
     /* ---------- 外部路径优先 ---------- */
