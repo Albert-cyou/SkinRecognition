@@ -14,15 +14,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
-import java.io.*;
 import android.content.pm.PackageManager;
+import java.io.*;
 
 public class ShareResultActivity extends AppCompatActivity {
 
     private static final int REQ_READ_STORAGE = 100;
     private ImageView ivResult;
-    private Bitmap  currentBitmap;
+    private Bitmap  currentBitmap;      // 对外接口图片
 
+    /* ===== 对外接口：任意组件可调用 ===== */
+    public void setImageBitmap(Bitmap bmp) {
+        currentBitmap = bmp;
+        ivResult.setImageBitmap(bmp);
+    }
+
+    /* ---------- 生命周期 ---------- */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,15 +39,20 @@ public class ShareResultActivity extends AppCompatActivity {
         Button btnSave  = findViewById(R.id.btn_save);
         Button btnShare = findViewById(R.id.btn_share);
 
-        /* 加载相册第一张图 */
-        loadFirstPhotoFromGallery();
+        /* 外部若通过 Intent 传图，优先使用；否则读相册第一张 */
+        Intent it = getIntent();
+        if (it.hasExtra("bitmap")) {
+            currentBitmap = (Bitmap) it.getParcelableExtra("bitmap");
+            ivResult.setImageBitmap(currentBitmap);
+        } else {
+            loadFirstPhotoFromGallery();
+        }
 
-        /* 保存 & 分享 */
         btnSave.setOnClickListener(v  -> saveImageToGallery());
         btnShare.setOnClickListener(v -> shareImage());
     }
 
-    /* ---------- 相册读取 ---------- */
+    /* ---------- 相册第一张图（默认） ---------- */
     private void loadFirstPhotoFromGallery() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
