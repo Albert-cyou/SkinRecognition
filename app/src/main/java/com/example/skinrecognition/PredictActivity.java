@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.content.Intent;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -344,41 +345,70 @@ public class PredictActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode != RESULT_OK) {
-            return;
-        }
+        if (resultCode != RESULT_OK) return;
 
         if (requestCode == REQUEST_TAKE_PHOTO) {
-            try {
-                // 从文件路径加载图片
-                Bitmap bitmap = BitmapFactory.decodeFile(currentPhotoPath);
-                if (bitmap != null) {
-                    ivPhoto.setImageBitmap(bitmap);
-                    processAndDisplayImage(bitmap);
-                } else {
-                    tvResult.setText("拍照图片加载失败");
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                tvResult.setText("处理拍照图片失败");
-            }
+            // 处理拍照图片
+            handleCapturedPhoto();
         }
 
         if (requestCode == REQUEST_SELECT_IMAGE && data != null) {
             Uri selectedImageUri = data.getData();
             if (selectedImageUri != null) {
+                // Android 10+ 必须持久化读取权限
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    int takeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION;
+                    if ((data.getFlags() & Intent.FLAG_GRANT_WRITE_URI_PERMISSION) != 0) {
+                        takeFlags |= Intent.FLAG_GRANT_WRITE_URI_PERMISSION;
+                    }
+                    try {
+                        getContentResolver().takePersistableUriPermission(selectedImageUri, takeFlags);
+                    } catch (SecurityException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+
                 try {
-                    // 从URI加载图片
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImageUri);
+                    // 使用更安全的方式加载图片
+                    InputStream inputStream = getContentResolver().openInputStream(selectedImageUri);
+                    Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                    inputStream.close();
+
                     ivPhoto.setImageURI(selectedImageUri);
-                    imageURI = selectedImageUri; //  保存URI，供分享时使用
-                    currentPhotoPath = null;     //  清空拍照路径
+                    imageURI = selectedImageUri;
+                    currentPhotoPath = null;
+
+                    // 调用分析预测
                     processAndDisplayImage(bitmap);
-                } catch (Exception e) {
+
+                } catch (IOException e) {
                     e.printStackTrace();
-                    tvResult.setText("处理相册图片失败");
+                    tvResult.setText("加载相册图片失败");
                 }
             }
+        }
+    }
+
+    // 单独封装拍照结果处理（更清晰）
+    private void handleCapturedPhoto() {
+        try {
+            Bitmap bitmap = BitmapFactory.decodeFile(currentPhotoPath);
+            if (bitmap != null) {
+                ivPhoto.setImageBitmap(bitmap);
+                processAndDisplayImage(bitmap);
+
+                // 通知系统扫描图片，让它显示在相册中
+                Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                Uri contentUri = Uri.fromFile(new File(currentPhotoPath));
+                mediaScanIntent.setData(contentUri);
+                sendBroadcast(mediaScanIntent);
+            } else {
+                tvResult.setText("拍照图片加载失败");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            tvResult.setText("处理拍照图片失败");
         }
     }
 
@@ -428,12 +458,10 @@ public class PredictActivity extends AppCompatActivity {
             intent.addCategory(Intent.CATEGORY_OPENABLE);
             intent.setType("image/*");
         } else {
-            intent = new Intent(Intent.ACTION_PICK,
-                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         }
 
-        intent = Intent.createChooser(intent, "选择皮肤照片");
-        startActivityForResult(intent, REQUEST_SELECT_IMAGE);
+        startActivityForResult(Intent.createChooser(intent, "选择皮肤照片"), REQUEST_SELECT_IMAGE);
     }
 
     @Override
