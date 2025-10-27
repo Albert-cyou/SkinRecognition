@@ -89,8 +89,16 @@ public class PredictActivity extends AppCompatActivity {
         // 点击分享按钮事件，跳转到分享页面
         btnShare.setOnClickListener(v -> {
             Intent intent = new Intent(PredictActivity.this, ShareResultActivity.class);
-            // 传递预测结果（可选）
+            // 传递识别结果文字
             intent.putExtra("result_text", tvResult.getText().toString());
+
+            // 传递当前显示的图片路径
+            if (currentPhotoPath != null) {
+                intent.putExtra("result_image_path", currentPhotoPath);
+            } else if (imageURI != null) {
+                intent.putExtra("result_image_uri", imageURI.toString());
+            }
+
             startActivity(intent);
         });
     }
@@ -363,6 +371,8 @@ public class PredictActivity extends AppCompatActivity {
                     // 从URI加载图片
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImageUri);
                     ivPhoto.setImageURI(selectedImageUri);
+                    imageURI = selectedImageUri; //  保存URI，供分享时使用
+                    currentPhotoPath = null;     //  清空拍照路径
                     processAndDisplayImage(bitmap);
                 } catch (Exception e) {
                     e.printStackTrace();
